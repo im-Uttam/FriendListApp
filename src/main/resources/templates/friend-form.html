@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${friend.id == null ? 'Add Friend' : 'Edit Friend'}"></title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; background: #f8f9fa; }
+        .form-container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .btn { width: 100%; padding: 12px; background: #4285f4; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600; }
+        .btn:hover { background: #357abd; }
+        .back-link { display: block; margin-top: 20px; text-align: center; text-decoration: none; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1 th:text="${friend.id == null ? '➕ Add Friend' : '✏️ Edit Friend'}"></h1>
+    
+    <form th:action="@{/friend-save}" th:object="${friend}" method="post">
+        <!-- Hidden ID field for editing -->
+        <input type="hidden" th:field="*{id}">
+        
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" th:field="*{friendName}" placeholder="Enter name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Contact Number</label>
+            <input type="text" th:field="*{contact}" placeholder="10 digit number" pattern="[0-9]{10}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" th:field="*{email}" placeholder="example@email.com">
+        </div>
+
+        <div class="form-group">
+            <label>Relation/Created Date</label>
+            <input type="date" th:field="*{createdDate}">
+        </div>
+
+        <button type="submit" class="btn" th:text="${friend.id == null ? 'Save Friend' : 'Update Friend'}"></button>
+    </form>
+
+    <a href="/friends-page" class="back-link">Cancel</a>
+</div>
+
+</body>
+</html>

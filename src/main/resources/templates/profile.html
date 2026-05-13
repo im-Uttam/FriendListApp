@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .card { border: 1px solid #ddd; padding: 20px; border-radius: 10px; width: fit-content; }
+    </style>
+</head>
+<body>
+    <a href="/dashboard">⬅ Back to Dashboard</a>
+    <h1>My Profile</h1>
+    <div class="card">
+        <img th:src="${user.profilePicture}" width="100" style="border-radius: 50%">
+        <h2 th:text="${user.name}"></h2>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Member Since:</strong> <span th:text="${user.createdAt}"></span></p>
+    </div>
+</body>
+</html>

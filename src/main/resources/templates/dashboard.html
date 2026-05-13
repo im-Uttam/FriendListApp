@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+
+</head>
+<body>
+
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/friends-page">Friends</a>
+    <a href="/profile">Profile</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="user-info">
+    <img th:src="${picture}" alt="Profile Picture">
+    <div>
+        <h1 th:text="'Welcome, ' + ${name} + '!'"></h1>
+        <p th:text="${email}"></p>
+    </div>
+</div>
+
+<p>Manage your contacts and friends list here.</p>
+
+</body>
+</html>
