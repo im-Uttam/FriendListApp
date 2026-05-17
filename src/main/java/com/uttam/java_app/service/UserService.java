@@ -4,6 +4,7 @@ import com.uttam.java_app.model.User;
 import com.uttam.java_app.repository.UserRepository;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -12,7 +13,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // Called after Google login — saves user if first time
+    @Transactional
     public User saveOrUpdateUser(OAuth2User oauth2User) {
         String email    = oauth2User.getAttribute("email");
         String name     = oauth2User.getAttribute("name");
@@ -20,12 +21,14 @@ public class UserService {
         String picture  = oauth2User.getAttribute("picture");
 
         return userRepository.findByEmail(email)
-            .map(existingUser -> {
+            .map(existingUser -> 
+            {
                 existingUser.setName(name);
                 existingUser.setProfilePicture(picture);
                 return userRepository.save(existingUser);
             })
-            .orElseGet(() -> {
+            .orElseGet(() -> 
+            {
                 User newUser = new User();
                 newUser.setEmail(email);
                 newUser.setName(name);

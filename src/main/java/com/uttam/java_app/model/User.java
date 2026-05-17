@@ -1,10 +1,18 @@
 package com.uttam.java_app.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "users")
 public class User {
@@ -13,12 +21,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String googleId;      // Google's unique user ID
+    private String name;
+    private String googleId;
     private String profilePicture;
     private LocalDateTime createdAt;
 

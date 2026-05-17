@@ -2,11 +2,17 @@ package com.uttam.java_app.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "friends")
 public class Friend {
@@ -34,5 +40,14 @@ public class Friend {
     @PrePersist
     public void prePersist() {
         this.addedAt = LocalDateTime.now();
+    }
+
+    // Explicit accessors so the IDE resolves them even if the Lombok plugin isn't active.
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

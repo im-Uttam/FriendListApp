@@ -16,10 +16,10 @@ public class FriendDAO {
             stmt.setString(4, email);
             stmt.setString(5, date);
             stmt.executeUpdate();
-            System.out.println("✅ Friend added!");
+            System.out.println("Friend added!");
 
         } catch (SQLException e) {
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ public class FriendDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -54,10 +54,10 @@ public class FriendDAO {
 
             stmt.setInt(1, friendId);
             stmt.executeUpdate();
-            System.out.println("✅ Friend deleted!");
+            System.out.println("Friend deleted!");
 
         } catch (SQLException e) {
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }
