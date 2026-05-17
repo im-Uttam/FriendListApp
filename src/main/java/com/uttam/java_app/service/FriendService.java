@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FriendService {
-
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
