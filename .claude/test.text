@@ -1,0 +1,100 @@
+Viewed FriendServiceTest.java:1-44
+
+Certainly! Here is a line-by-line breakdown of the `FriendServiceTest.java` code to help you understand how unit testing with **JUnit 5** and **Mockito** works.
+
+### 1. Annotations and Class Setup
+*   **Line 21: `@ExtendWith(MockitoExtension.class)`**
+    This tells JUnit to use Mockito to manage mocks. It automatically initializes fields annotated with `@Mock` and `@InjectMocks`.
+*   **Lines 24-28: `@Mock`**
+    We create "fake" (mock) versions of `FriendRepository` and `UserRepository`. Instead of connecting to a real database, these mocks will return whatever data we tell them to return during the test.
+*   **Lines 30-31: `@InjectMocks`**
+    Mockito creates an instance of `FriendService` and "injects" the two mocks above (`friendRepository` and `userRepository`) into it. This allows us to test the service in isolation.
+
+---
+
+### 2. Test Data Setup
+*   **Line 36: `@BeforeEach`**
+    This method runs **before every single test case**. It’s used to reset data so each test starts with a fresh state.
+*   **Lines 38-44: `setUp()`**
+    We create a dummy `User` and a dummy `Friend` object to use throughout our tests. This avoids repeating this setup code in every method.
+
+---
+
+### 3. Testing `addFriend`
+```java
+@Test
+void addFriend_ShouldReturnSavedFriend() {
+    // Arrange: Tell the mocks how to behave
+    when(userRepository.getReferenceById(user.getId())).thenReturn(user);
+    when(friendRepository.save(any(Friend.class))).thenReturn(friend);
+
+    // Act: Call the actual method we are testing
+    Friend result = friendService.addFriend(friend, user);
+
+    // Assert: Verify the results
+    assertNotNull(result);
+    assertEquals("John Doe", result.getFriendName());
+    verify(friendRepository).save(friend); // Check if repository.save was actually called
+}
+```
+*   **`when(...).thenReturn(...)`**: This is called **stubbing**. We tell the mock: "If someone calls `getReferenceById`, return our dummy `user`."
+*   **`verify(...)`**: This ensures that the code actually interacted with the database (the repository) as expected.
+
+---
+
+### 4. Testing `getFriends`
+```java
+@Test
+void getFriends_ShouldReturnList() {
+    // Arrange
+    when(friendRepository.findByUser(user)).thenReturn(Collections.singletonList(friend));
+
+    // Act
+    List<Friend> result = friendService.getFriends(user);
+
+    // Assert
+    assertEquals(1, result.size());
+    verify(friendRepository).findByUser(user);
+}
+```
+*   Here, we simulate the database returning a list with one friend. We then assert that the service returns that same list.
+
+---
+
+### 5. Testing `deleteFriend`
+```java
+@Test
+void deleteFriend_ShouldCallRepository() {
+    // Act
+    friendService.deleteFriend(1L, user);
+
+    // Assert
+    verify(friendRepository).deleteByIdAndUser(1L, user);
+}
+```
+*   Since `deleteFriend` returns `void`, the main thing to test is **behavior**. We use `verify` to make sure the service correctly passed the ID and User to the repository's delete method.
+
+---
+
+### 6. Testing Exception Handling (`getFriendByIdAndUser`)
+```java
+@Test
+void getFriendByIdAndUser_ShouldThrowException_WhenNotFound() {
+    // Arrange: Simulate "not found" in database
+    when(friendRepository.findByIdAndUser(1L, user)).thenReturn(Optional.empty());
+
+    // Act & Assert: Verify that it throws the correct exception
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        friendService.getFriendByIdAndUser(1L, user);
+    });
+
+    assertEquals("Friend not found", exception.getMessage());
+}
+```
+*   **`assertThrows`**: This is used to test negative scenarios. We expect the code to fail if a friend isn't found, and we check that the error message is exactly `"Friend not found"`.
+
+### Summary of the Pattern
+Every test follows the **AAA** pattern:
+1.  **Arrange**: Set up the mocks and data.
+2.  **Act**: Call the service method.
+3.  **Assert**: Check if the result is correct or if the right methods were called.
