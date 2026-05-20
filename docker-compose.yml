@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  friendlist-app:
+    build: .
+    image: friendlist
+    ports:
+      - "8080:8080"
+    # automatically loads Google OAuth variables from .env
+    env_file:
+      - .env
+    #overrides the database URL specifically for the container
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/friendlist
+    # Ensures host.docker.internal works correctly on all OS versions
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
